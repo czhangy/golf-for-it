@@ -4,7 +4,9 @@ const {
     Vector, Vector3, vec, vec3, vec4, color, hex_color, Shader, Matrix, Mat4, Light, Shape, Material, Scene,
 } = tiny;
 
-import { GameObject } from './game-object.js';
+import { GameObject } from './src/game-object.js';
+import { GolfBall } from './src/golf-ball.js';
+import { Ground } from './src/ground.js';
 
 export class GolfForIt extends Scene {
     constructor() {
@@ -13,27 +15,28 @@ export class GolfForIt extends Scene {
 
         // At the beginning of our program, load one of each of these shape definitions onto the GPU.
         this.shapes = {
-            sphere: new defs.Subdivision_Sphere(4),
-            cube: new defs.Cube()
+            cube: new defs.Cube(),
+            sphere: new defs.Subdivision_Sphere(4)
         };
 
         // *** Materials
         this.materials = {
-            phong: new Material(new defs.Phong_Shader())
+            default: new Material(new defs.Phong_Shader(),
+                { ambient: .4, diffusivity: .6, color: hex_color("#ffffff") }),
+            ground: new Material(new defs.Phong_Shader(),
+                { ambient: .4, diffusivity: .6, specularity: 0, color: hex_color("#348c31") })
         };
 
-        this.initial_camera_location = Mat4.look_at(vec3(0, 10, 20), vec3(0, 0, 0), vec3(0, 1, 0));
+        this.initial_camera_location = Mat4.look_at(vec3(0, 10, 30), vec3(0, 0, 0), vec3(0, 1, 0));
 
-        // For testing
-        let golf_ball = new GameObject();
-        golf_ball.renderer.shape = this.shapes.sphere;
+        // GameObjects
+        this.game_objects = {
+            golf_ball: new GolfBall(this.shapes, this.materials),
+            ground: new Ground(this.shapes, this.materials)
+        };
 
-        let platform = new GameObject();
-        platform.renderer.shape = this.shapes.cube;
-        platform.transform.position = vec3(0, -2, 0);
-        platform.transform.scale = vec3(10, 1, 10);
 
-        this.game_objects = [golf_ball, platform];
+        this.game_objects.ground.transform.position = vec3(0, -2, 0);
     }
 
     make_control_panel() {
@@ -59,51 +62,9 @@ export class GolfForIt extends Scene {
         const t = program_state.animation_time / 1000, dt = program_state.animation_delta_time / 1000;
         let model_transform = Mat4.identity();
 
-        for (let i = 0; i < this.game_objects.length; i++) {
-            this.physics_update(this.game_objects[i]);
-        }
-
-        for (let i = 0; i < this.game_objects.length; i++) {
-            this.collider_update(this.game_objects[i]);
-        }
-
-        for (let i = 0; i < this.game_objects.length; i++) {
-            this.game_objects[i].logic.update();
-        }
-
-        for (let i = 0; i < this.game_objects.length; i++) {
-            this.renderer_update(context, program_state, model_transform, this.game_objects[i]);
-        }
-
-    }
-
-    physics_update(game_object) {
-
-    }
-
-    collider_update(game_object) {
-
-    }
-
-    renderer_update(context, program_state, model_transform, game_object) {
-        if (game_object.is_enabled && game_object.renderer.is_enabled) {
-            const shape = (game_object.renderer.shape != null) ? game_object.renderer.shape : this.shapes.sphere;
-            const material = (game_object.renderer.material != null) ? game_object.renderer.material : this.materials.phong;
-
-            model_transform = model_transform
-                .times(Mat4.translation(game_object.transform.position[0], game_object.transform.position[1], game_object.transform.position[2]))
-                .times(Mat4.rotation(game_object.transform.rotation[0], 1, 0, 0))
-                .times(Mat4.rotation(game_object.transform.rotation[1], 0, 1, 0))
-                .times(Mat4.rotation(game_object.transform.rotation[2], 0, 0, 1))
-                .times(Mat4.scale(game_object.transform.scale[0], game_object.transform.scale[1], game_object.transform.scale[2]));
-
-            shape.draw(context, program_state, model_transform, material.override({
-                color: game_object.renderer.color,
-                ambient: game_object.renderer.ambient,
-                diffusivity: game_object.renderer.diffusivity,
-                specularity: game_object.renderer.specularity,
-                smoothness: game_object.renderer.smoothness
-            }));
-        }
+        Object.values(this.game_objects).forEach(val => val.physics.update());
+        Object.values(this.game_objects).forEach(val => val.collider.update());
+        Object.values(this.game_objects).forEach(val => val.logic.update());
+        Object.values(this.game_objects).forEach(val => val.renderer.update(context, program_state, model_transform));
     }
 }
