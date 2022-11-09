@@ -5,6 +5,8 @@ import {
 	calculateVelocity,
 } from "./physics.js";
 
+import { isColliding } from "./collision.js";
+
 const {
 	Vector,
 	Vector3,
@@ -23,7 +25,7 @@ const {
 } = tiny;
 
 export class GameObject {
-	constructor(shapes, materials, hasPhysics) {
+	constructor(shapes, materials, hasPhysics, hasCollision) {
 		this.is_enabled = true;
 
 		this.transform = {
@@ -42,9 +44,9 @@ export class GameObject {
 		};
 
 		this.collider = {
-			is_enabled: true,
+			is_enabled: hasCollision,
 			colliding_game_objects: null,
-			update: () => this.#collider_update(),
+			update: (gameObjects) => this.#collider_update(gameObjects),
 		};
 
 		this.logic = {
@@ -73,7 +75,15 @@ export class GameObject {
 		}
 	}
 
-	#collider_update() {}
+	#collider_update(gameObjects) {
+		if (this.collider.is_enabled) {
+			Object.values(gameObjects).forEach((object) => {
+				if (object !== this && isColliding(this, object)) {
+					console.log("collide!");
+				}
+			});
+		}
+	}
 
 	#renderer_update(context, program_state, model_transform) {
 		if (this.is_enabled && this.renderer.is_enabled) {

@@ -20,8 +20,8 @@ const {
 import { GameObject } from "./game-object.js";
 
 export class Ground extends GameObject {
-	constructor(shapes, materials, hasPhysics) {
-		super(shapes, materials, hasPhysics);
+	constructor(shapes, materials, hasPhysics, hasCollision) {
+		super(shapes, materials, hasPhysics, hasCollision);
 
 		this.renderer.shape = this.shapes.cube;
 		this.renderer.material = this.materials.ground;

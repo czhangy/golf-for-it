@@ -56,9 +56,13 @@ export class GolfForIt extends Scene {
 
 		// GameObjects
 		this.game_objects = {
-			golf_ball: new GolfBall(this.shapes, this.materials, true),
-			ground: new Ground(this.shapes, this.materials, false),
+			golf_ball: new GolfBall(this.shapes, this.materials, true, true),
+			ground: new Ground(this.shapes, this.materials, false, false),
+			wall: new Ground(this.shapes, this.materials, false, false),
 		};
+
+		this.game_objects.wall.transform.scale = vec3(1, 1, 1);
+		this.game_objects.wall.transform.position = vec3(0, 0, -2);
 
 		this.game_objects.ground.transform.position = vec3(0, -2, 0);
 
@@ -123,7 +127,7 @@ export class GolfForIt extends Scene {
 			val.physics.update(dt)
 		);
 		Object.values(this.game_objects).forEach((val) =>
-			val.collider.update()
+			val.collider.update(this.game_objects)
 		);
 		Object.values(this.game_objects).forEach((val) => val.logic.update());
 		Object.values(this.game_objects).forEach((val) =>
