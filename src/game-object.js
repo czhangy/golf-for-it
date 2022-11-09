@@ -30,6 +30,7 @@ export class GameObject {
 			position: vec3(0, 0, 0),
 			rotation: vec3(0, 0, 0),
 			scale: vec3(1, 1, 1),
+			model_transform: Mat4.identity(),
 		};
 
 		this.physics = {
@@ -94,7 +95,7 @@ export class GameObject {
 						this.transform.scale[2]
 					)
 				);
-
+			this.transform.model_transform = model_transform;
 			this.renderer.shape.draw(
 				context,
 				program_state,

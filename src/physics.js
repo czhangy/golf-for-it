@@ -17,7 +17,7 @@ export const calculateVelocity = (gameObject, dt) => {
 		gameObject.physics.velocity[i] =
 			gameObject.physics.velocity[i] +
 			gameObject.physics.acceleration[i] * dt;
-		// Zero out velocity when the object is close to stopped
+		// Clamp to 0 velocity when the object is close to stopped
 		if (Math.abs(gameObject.physics.velocity[i]) < epsilon)
 			gameObject.physics.velocity[i] = 0;
 	}

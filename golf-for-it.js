@@ -61,6 +61,9 @@ export class GolfForIt extends Scene {
 		};
 
 		this.game_objects.ground.transform.position = vec3(0, -2, 0);
+
+		// Settings
+		this.aimSensitivity = Math.PI / 6;
 	}
 
 	make_control_panel() {
@@ -72,12 +75,18 @@ export class GolfForIt extends Scene {
 		});
 		this.key_triggered_button("Aim left", ["a"], () => {
 			if (this.game_objects.golf_ball.physics.velocity.norm() === 0) {
-				this.game_objects.golf_ball.physics.direction += Math.PI / 6;
+				this.game_objects.golf_ball.transform.rotation[1] +=
+					this.aimSensitivity;
+				this.game_objects.golf_ball.physics.direction +=
+					this.aimSensitivity;
 			}
 		});
 		this.key_triggered_button("Aim right", ["d"], () => {
 			if (this.game_objects.golf_ball.physics.velocity.norm() === 0) {
-				this.game_objects.golf_ball.physics.direction -= Math.PI / 6;
+				this.game_objects.golf_ball.transform.rotation[1] -=
+					this.aimSensitivity;
+				this.game_objects.golf_ball.physics.direction -=
+					this.aimSensitivity;
 			}
 		});
 	}
@@ -120,5 +129,16 @@ export class GolfForIt extends Scene {
 		Object.values(this.game_objects).forEach((val) =>
 			val.renderer.update(context, program_state, model_transform)
 		);
+
+		// Follow ball with camera
+		let camera = Mat4.inverse(
+			this.game_objects.golf_ball.transform.model_transform.times(
+				Mat4.rotation(0.3, -1, 0, 0).times(Mat4.translation(0, 0, 20))
+			)
+		);
+		camera = camera.map((x, i) =>
+			Vector.from(program_state.camera_inverse[i]).mix(x, 0.1)
+		);
+		program_state.set_camera(camera);
 	}
 }
