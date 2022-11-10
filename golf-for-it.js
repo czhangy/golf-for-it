@@ -68,7 +68,7 @@ export class GolfForIt extends Scene {
 
 		// Settings
 		this.aimSensitivity = Math.PI / 6;
-		this.power = 1000; 
+		this.power = 1000;
 	}
 
 	make_control_panel() {
@@ -95,23 +95,23 @@ export class GolfForIt extends Scene {
 			}
 		});
 		this.new_line();
+		this.new_line();
 		const power_controls = this.control_panel.appendChild(
 			document.createElement("span")
 		);
 		power_controls.style.margin = "30px";
 		this.key_triggered_button(
-			"-",
+			"Decrease power",
 			["s"],
-			() => (this.power=Math.max(0, this.power-100)),
+			() => (this.power = Math.max(0, this.power - 100))
 		);
 		this.live_string((box) => {
 			box.textContent = "Power: " + this.power;
 		}, power_controls);
 		this.key_triggered_button(
-			"+",
+			"Increase power",
 			["w"],
-			() => (this.power=Math.min(2000, this.power+100)),
-
+			() => (this.power = Math.min(2000, this.power + 100))
 		);
 	}
 
