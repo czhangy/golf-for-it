@@ -59,12 +59,41 @@ export class GolfForIt extends Scene {
 			golf_ball: new GolfBall(this.shapes, this.materials, true, true),
 			ground: new Ground(this.shapes, this.materials, false, false),
 			wall: new Ground(this.shapes, this.materials, false, false),
+			left_wall: new Ground(this.shapes, this.materials, false, false),
+			right_wall: new Ground(this.shapes, this.materials, false, false),
+			left_wall2: new Ground(this.shapes, this.materials, false, false),
+			right_wall2: new Ground(this.shapes, this.materials, false, false),
+			back_wall: new Ground(this.shapes, this.materials, false, false)
 		};
 
-		this.game_objects.wall.transform.scale = vec3(1, 1, 1);
-		this.game_objects.wall.transform.position = vec3(0, 0, -2);
+		// original objects
+		//this.game_objects.wall.transform.scale = vec3(1, 1, 1);
+		//this.game_objects.wall.transform.position = vec3(0, 0, -5);
+
+		// Obstacle
+		this.game_objects.wall.transform.scale = vec3(2, 2, 2);
+		this.game_objects.wall.transform.position = vec3(0, 1, -20);
 
 		this.game_objects.ground.transform.position = vec3(0, -2, 0);
+
+		// Walls
+		this.game_objects.left_wall.transform.scale = vec3(1, 2, 30);
+		this.game_objects.left_wall.transform.position = vec3(-10, 1, -15);
+
+		this.game_objects.right_wall.transform.scale = vec3(1, 2, 12);
+		this.game_objects.right_wall.transform.position = vec3(10, 1, 2);
+
+		
+		this.game_objects.left_wall2.transform.scale = vec3(1, 2, 30);
+		this.game_objects.left_wall2.transform.rotation = vec3(0, Math.PI/2, 0);
+		this.game_objects.left_wall2.transform.position = vec3(20, 1, -45);
+
+		this.game_objects.right_wall2.transform.scale = vec3(1, 2, 21);
+		this.game_objects.right_wall2.transform.rotation = vec3(0, Math.PI/2, 0);
+		this.game_objects.right_wall2.transform.position = vec3(30, 1, -10);
+
+		this.game_objects.back_wall.transform.scale = vec3(1, 2, 17);
+		this.game_objects.back_wall.transform.position = vec3(50, 1, -27);
 
 		// Settings
 		this.aimSensitivity = Math.PI / 6;
