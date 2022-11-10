@@ -86,7 +86,7 @@ export class GolfForIt extends Scene {
 		
 		this.game_objects.left_wall2.transform.scale = vec3(1, 2, 30);
 		this.game_objects.left_wall2.transform.rotation = vec3(0, Math.PI/2, 0);
-		this.game_objects.left_wall2.transform.position = vec3(20, 1, -45);
+		this.game_objects.left_wall2.transform.position = vec3(20, 1, -44);
 
 		this.game_objects.right_wall2.transform.scale = vec3(1, 2, 21);
 		this.game_objects.right_wall2.transform.rotation = vec3(0, Math.PI/2, 0);
