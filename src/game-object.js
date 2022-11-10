@@ -79,7 +79,8 @@ export class GameObject {
 		if (this.collider.is_enabled) {
 			Object.values(gameObjects).forEach((object) => {
 				if (object !== this && isColliding(this, object)) {
-					console.log("collide!");
+					this.physics.velocity = vec3(0, 0, 0);
+					this.physics.acceleration = vec3(0, 0, 0);
 				}
 			});
 		}
