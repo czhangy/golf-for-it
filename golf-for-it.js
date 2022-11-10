@@ -68,13 +68,14 @@ export class GolfForIt extends Scene {
 
 		// Settings
 		this.aimSensitivity = Math.PI / 6;
+		this.power = 1000; 
 	}
 
 	make_control_panel() {
 		// Disable controls when ball is in motion
 		this.key_triggered_button("Hit ball", [" "], () => {
 			if (this.game_objects.golf_ball.physics.velocity.norm() === 0) {
-				hitBall(this.game_objects.golf_ball, 1000);
+				hitBall(this.game_objects.golf_ball, this.power);
 			}
 		});
 		this.key_triggered_button("Aim left", ["a"], () => {
@@ -93,6 +94,25 @@ export class GolfForIt extends Scene {
 					this.aimSensitivity;
 			}
 		});
+		this.new_line();
+		const power_controls = this.control_panel.appendChild(
+			document.createElement("span")
+		);
+		power_controls.style.margin = "30px";
+		this.key_triggered_button(
+			"-",
+			["s"],
+			() => (this.power=Math.max(0, this.power-100)),
+		);
+		this.live_string((box) => {
+			box.textContent = "Power: " + this.power;
+		}, power_controls);
+		this.key_triggered_button(
+			"+",
+			["w"],
+			() => (this.power=Math.min(2000, this.power+100)),
+
+		);
 	}
 
 	display(context, program_state) {
