@@ -115,20 +115,6 @@ export class GolfForIt extends Scene {
 		hitting_controls.style.display = "flex";
 		hitting_controls.style.justifyContent = "space-between";
 		this.key_triggered_button(
-			"Hit ball",
-			[" "],
-			() => {
-				if (this.game_objects.golf_ball.physics.velocity.norm() === 0) {
-					hitBall(this.game_objects.golf_ball, this.power);
-					this.strokeCount++;
-				}
-			},
-			undefined,
-			undefined,
-			undefined,
-			hitting_controls
-		);
-		this.key_triggered_button(
 			"Aim left",
 			["a"],
 			() => {
@@ -137,6 +123,20 @@ export class GolfForIt extends Scene {
 						this.aimSensitivity;
 					this.game_objects.golf_ball.physics.direction +=
 						this.aimSensitivity;
+				}
+			},
+			undefined,
+			undefined,
+			undefined,
+			hitting_controls
+		);
+		this.key_triggered_button(
+			"Hit ball",
+			[" "],
+			() => {
+				if (this.game_objects.golf_ball.physics.velocity.norm() === 0) {
+					hitBall(this.game_objects.golf_ball, this.power);
+					this.strokeCount++;
 				}
 			},
 			undefined,
@@ -224,7 +224,7 @@ export class GolfForIt extends Scene {
 			val.physics.update(dt)
 		);
 		Object.values(this.game_objects).forEach((val) =>
-			val.collider.update(this.game_objects)
+			val.collider.update(this.game_objects, dt)
 		);
 		Object.values(this.game_objects).forEach((val) => val.logic.update());
 		Object.values(this.game_objects).forEach((val) =>

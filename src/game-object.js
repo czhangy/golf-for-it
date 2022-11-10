@@ -46,7 +46,7 @@ export class GameObject {
 		this.collider = {
 			is_enabled: hasCollision,
 			colliding_game_objects: null,
-			update: (gameObjects) => this.#collider_update(gameObjects),
+			update: (gameObjects, dt) => this.#collider_update(gameObjects, dt),
 		};
 
 		this.logic = {
@@ -75,10 +75,12 @@ export class GameObject {
 		}
 	}
 
-	#collider_update(gameObjects) {
+	#collider_update(gameObjects, dt) {
 		if (this.collider.is_enabled) {
 			Object.values(gameObjects).forEach((object) => {
 				if (object !== this && isColliding(this, object)) {
+					// Temp fix: make ball jump out of wall
+					calculatePosition(this, -dt);
 					this.physics.velocity = vec3(0, 0, 0);
 					this.physics.acceleration = vec3(0, 0, 0);
 				}
