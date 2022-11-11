@@ -90,8 +90,8 @@ export class GolfForIt extends Scene {
 		this.game_objects.back_wall.transform.position = vec3(50, 1, -27);
 
 		// Settings
-		this.aimSensitivity = Math.PI / 6;
-		this.power = 1000;
+		this.aimSensitivity = Math.PI / 12;
+		this.power = 2000;
 		this.strokeCount = 0;
 	}
 
@@ -184,7 +184,7 @@ export class GolfForIt extends Scene {
 		this.key_triggered_button(
 			"Increase power",
 			["w"],
-			() => (this.power = Math.min(2000, this.power + 100)),
+			() => (this.power = Math.min(4000, this.power + 100)),
 			undefined,
 			undefined,
 			undefined,
