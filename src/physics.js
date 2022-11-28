@@ -1,6 +1,6 @@
 // Constants
 const epsilon = 0.4;
-const frictionForce = -2;
+const frictionForce = -4;
 
 export const calculatePosition = (gameObject, dt) => {
 	for (let i = 0; i < 3; i++) {
