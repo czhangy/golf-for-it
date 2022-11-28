@@ -93,6 +93,23 @@ export class GolfForIt extends Scene {
 		this.aimSensitivity = Math.PI / 6;
 		this.power = 1000;
 		this.strokeCount = 0;
+
+		// Score tracking
+        this.first_score = null;
+        this.second_score = null;
+        this.third_score = null;
+        this.computeScoreboard = (score) => {
+            if (!this.first_score || score < this.first_score) {
+                this.third_score = this.second_score;
+                this.second_score = this.first_score;
+                this.first_score = score;
+            } else if (!this.second_score || score < this.second_score) {
+                this.third_score = this.second_score;
+                this.second_score = score;
+            } else if (!this.third_score || score < this.third_score) {
+                this.third_score = score;
+            }
+        };
 	}
 
 	make_control_panel() {
@@ -190,6 +207,42 @@ export class GolfForIt extends Scene {
 			undefined,
 			power_controls
 		);
+		
+		// Scoreboard
+        const scoreboard = this.control_panel.appendChild(
+            document.createElement("div")
+        );
+        scoreboard.style.display = "flex";
+        scoreboard.style.flexDirection = "column";
+        scoreboard.style.alignItems = "center";
+        scoreboard.style.margin = "0 30px";
+        scoreboard.style.border = "2px solid black";
+        scoreboard.style.padding = "20px";
+        this.live_string((box) => {
+            box.textContent = "Scoreboard";
+            box.style.marginBottom = "10px";
+        }, scoreboard);
+        if (this.first_score) {
+            this.live_string((box) => {
+                box.textContent = `#1: ${this.first_score} strokes`;
+                box.style.marginBottom = "10px";
+            }, scoreboard);
+        } else {
+            this.live_string((box) => {
+                box.textContent = "No scores yet! Be the first!";
+            }, scoreboard);
+        }
+        if (this.second_score) {
+            this.live_string((box) => {
+                box.textContent = `#2: ${this.second_score} strokes`;
+                box.style.marginBottom = "10px";
+            }, scoreboard);
+        }
+        if (this.second_score) {
+            this.live_string((box) => {
+                box.textContent = `#3: ${this.third_score} strokes`;
+            }, scoreboard);
+        }
 	}
 
 	display(context, program_state) {
