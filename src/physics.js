@@ -1,60 +1,60 @@
+import test_collision from "./collision";
+
 // Constants
 const epsilon = 0.4;
-const frictionForce = -4;
+const frictionForce = -0.02;
+const forceFactor = 500;
 
-export const calculatePosition = (gameObject, dt) => {
-    for (let i = 0; i < 3; i++) {
-        // xf = xo + vt
-        gameObject.transform.position[i] =
-            gameObject.transform.position[i] +
-            gameObject.rigidbody.velocity[i] * dt;
-    }
+const calculateVelocity = (gameObject) => {
+	return (
+		gameObject.rigidbody.velocity[0] ** 2 +
+		gameObject.rigidbody.velocity[2] ** 2
+	);
 };
 
-export const calculateVelocity = (gameObject, dt) => {
-    for (let i = 0; i < 3; i++) {
-        // vf = vo + at
-        gameObject.rigidbody.velocity[i] =
-            gameObject.rigidbody.velocity[i] +
-            gameObject.rigidbody.acceleration[i] * dt;
-        // Clamp to 0 velocity when the object is close to stopped
-        if (Math.abs(gameObject.rigidbody.velocity[i]) < epsilon)
-            gameObject.rigidbody.velocity[i] = 0;
-    }
+const calculatePosition = (gameObject, dt) => {
+	// x-pos
+	gameObject.transform.position[0] +=
+		gameObject.rigidbody.velocity[0] * dt * 2 * Math.PI;
+	// z-pos
+	gameObject.transform.position[2] +=
+		gameObject.rigidbody.velocity[2] * dt * 2 * Math.PI;
 };
 
-export const applyFriction = (gameObject) => {
-    // Apply x-friction if the ball is in motion in the x-direction
-    if (gameObject.rigidbody.velocity[0] !== 0) {
-        gameObject.rigidbody.acceleration[0] =
-            -frictionForce * Math.sin(gameObject.rigidbody.direction);
-    }
-    // Apply z-friction if the ball is in motion in the z-direction
-    if (gameObject.rigidbody.velocity[2] !== 0) {
-        gameObject.rigidbody.acceleration[2] =
-            -frictionForce * Math.cos(gameObject.rigidbody.direction);
-    }
+const applyFriction = (gameObject) => {
+	// Apply x-friction if the ball is in motion in the x-direction
+	if (gameObject.rigidbody.velocity[0] !== 0) {
+		gameObject.rigidbody.velocity[0] -=
+			frictionForce * Math.sin(gameObject.rigidbody.direction);
+	}
+	// Apply z-friction if the ball is in motion in the z-direction
+	if (gameObject.rigidbody.velocity[2] !== 0) {
+		gameObject.rigidbody.velocity[2] -=
+			frictionForce * Math.cos(gameObject.rigidbody.direction);
+	}
+	// Clamp velocity to 0
+	if (calculateVelocity(gameObject) < epsilon ** 2) {
+		gameObject.rigidbody.velocity[0] = 0;
+		gameObject.rigidbody.velocity[2] = 0;
+	}
 };
 
 export const hitBall = (gameObject, force) => {
-    // Get x-component
-    gameObject.rigidbody.acceleration[0] =
-        -force * Math.sin(gameObject.rigidbody.direction);
-    // Get z-component
-    gameObject.rigidbody.acceleration[2] =
-        -force * Math.cos(gameObject.rigidbody.direction);
+	// Get x-component
+	gameObject.rigidbody.velocity[0] =
+		-(force / forceFactor) * Math.sin(gameObject.rigidbody.direction);
+	// Get z-component
+	gameObject.rigidbody.velocity[2] =
+		-(force / forceFactor) * Math.cos(gameObject.rigidbody.direction);
 };
 
 export function update_physics(game_objects, dt) {
-    Object.values(game_objects).forEach((val) =>
-        update(val, dt)
-    );
+	Object.values(game_objects).forEach((val) => update(val, dt));
 }
 
 function update(gameObject, dt) {
-    if (gameObject.rigidbody.is_enabled) {
-        applyFriction(gameObject);
-        calculateVelocity(gameObject, dt);
-        calculatePosition(gameObject, dt);
-    }
+	if (gameObject.rigidbody.is_enabled) {
+		applyFriction(gameObject);
+		calculatePosition(gameObject, dt);
+	}
 }
