@@ -56,13 +56,13 @@ export class GolfForIt extends Scene {
 				material: this.materials.obstacle,
 			}),
 			left_wall: new GameObject({
-				size: vec3(1, 2, 30),
-				position: vec3(-10, 1, -15),
+				size: vec3(1, 2, 35),
+				position: vec3(-10, 1, -10),
 				material: this.materials.obstacle,
 			}),
 			right_wall: new GameObject({
-				size: vec3(1, 2, 12),
-				position: vec3(10, 1, 2),
+				size: vec3(1, 2, 17),
+				position: vec3(10, 1, 7),
 				material: this.materials.obstacle,
 			}),
 			left_wall2: new GameObject({
@@ -78,6 +78,11 @@ export class GolfForIt extends Scene {
 			back_wall: new GameObject({
 				size: vec3(1, 2, 17),
 				position: vec3(50, 1, -27),
+				material: this.materials.obstacle,
+			}),
+			front_wall: new GameObject({
+				size:vec3(11, 2, 1),
+				position: vec3(0, 1, 25),
 				material: this.materials.obstacle,
 			}),
 		};
@@ -201,6 +206,24 @@ export class GolfForIt extends Scene {
 			undefined,
 			undefined,
 			power_controls
+		);
+		
+		// Reset control
+		const reset_control = this.control_panel.appendChild(document.createElement("span"));
+		reset_control.style.margin = "30px";
+		reset_control.style.display = "flex";
+		reset_control.style.justifyContent = "center";
+		this.key_triggered_button(
+			"Reset ball",
+			["r"],
+			() => (this.game_objects.golf_ball = new GameObject({
+				has_rigidbody: true,
+				shape: this.shapes.sphere,
+			})),
+			undefined,
+			undefined,
+			undefined,
+			reset_control
 		);
 
 		// Scoreboard
