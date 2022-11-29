@@ -22,7 +22,6 @@ import { GameObject } from "./game-object.js";
 export class GolfBall extends GameObject {
 	constructor(shapes, materials, hasPhysics, hasCollision) {
 		super(shapes, materials, hasPhysics, hasCollision);
-
 		this.renderer.shape = this.shapes.sphere;
 	}
 }

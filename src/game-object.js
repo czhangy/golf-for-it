@@ -1,9 +1,5 @@
 import { defs, tiny } from "../examples/common.js";
-import {
-	applyFriction,
-	calculatePosition,
-	calculateVelocity,
-} from "./physics.js";
+import { applyFriction, calculatePosition } from "./physics.js";
 
 import { isColliding } from "./collision.js";
 
@@ -70,7 +66,6 @@ export class GameObject {
 	#physics_update(dt) {
 		if (this.physics.is_enabled) {
 			applyFriction(this);
-			calculateVelocity(this, dt);
 			calculatePosition(this, dt);
 		}
 	}
