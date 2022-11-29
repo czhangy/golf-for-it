@@ -6,7 +6,7 @@ import { Shapes } from "./game-object.js";
 
 const clamp = (num, min, max) => Math.min(Math.max(num, min), max);
 
-export default function test_collision(game_object_1, game_object_2) {
+export function test_collision(game_object_1, game_object_2) {
 	if (
 		!game_object_1.collider.is_enabled ||
 		!game_object_2.collider.is_enabled
@@ -42,7 +42,6 @@ function test_box_sphere_collision(box, sphere) {
 	let distance = collision_delta.norm();
 
 	if (distance < sphere.transform.size[0]) {
-		console.log(collision_delta.normalized());
 		return collision_delta.normalized();
 	}
 

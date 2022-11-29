@@ -133,8 +133,6 @@ export class GolfForIt extends Scene {
 				) {
 					this.game_objects.golf_ball.transform.rotation[1] +=
 						this.aimSensitivity;
-					this.game_objects.golf_ball.rigidbody.direction +=
-						this.aimSensitivity;
 				}
 			},
 			undefined,
@@ -166,8 +164,6 @@ export class GolfForIt extends Scene {
 					this.game_objects.golf_ball.rigidbody.velocity.norm() === 0
 				) {
 					this.game_objects.golf_ball.transform.rotation[1] -=
-						this.aimSensitivity;
-					this.game_objects.golf_ball.rigidbody.direction -=
 						this.aimSensitivity;
 				}
 			},
@@ -296,7 +292,7 @@ export class GolfForIt extends Scene {
 			)
 		);
 		camera = camera.map((x, i) =>
-			Vector.from(program_state.camera_inverse[i]).mix(x, 0.1)
+			Vector.from(program_state.camera_inverse[i]).mix(x, 0.3)
 		);
 		program_state.set_camera(camera);
 	}
