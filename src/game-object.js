@@ -29,21 +29,33 @@ export const Materials = {
         color: hex_color("#ffffff"),
     }),
     obstacle: new Material(new defs.Phong_Shader(), {
-        ambient: 0.4,
+        ambient: 0.8,
         diffusivity: 0.6,
         specularity: 0,
         color: hex_color("#964B00"),
     }),
     golf_ball: new Material(new defs.Phong_Shader(), {
-        ambient: 0.4,
+        ambient: 0.8,
         diffusivity: 0.6,
         color: hex_color("#ffffff"),
     }),
     ground: new Material(new defs.Phong_Shader(), {
-        ambient: 0.4,
+        ambient: 0.8,
         diffusivity: 0.6,
         specularity: 0,
         color: hex_color("#008000"),
+    }),
+    sky: new Material(new defs.Phong_Shader(), {
+        ambient: 0.8,
+        diffusivity: 0.6,
+        specularity: 0,
+        color: hex_color("#87CEEB"),
+    }),
+    goal: new Material(new defs.Phong_Shader(), {
+        ambient: 0.8,
+        diffusivity: 0.6,
+        specularity: 0,
+        color: color(1, 0, 0, 0.7),
     })
 }
 
