@@ -127,23 +127,59 @@ export class GolfForIt extends Scene {
         // Settings
         this.aimSensitivity = Math.PI / 60;
         this.power = 2000;
-        this.strokeCount = 0;
+        this.strokeCount = 0; 
+
 
         // Score tracking
         this.first_score = null;
         this.second_score = null;
         this.third_score = null;
+		this.first_score_string = "No scores yet! Be the first!";
+		this.second_score_string = null;
+		this.third_score_string = null;
         this.computeScoreboard = (score) => {
             if (!this.first_score || score < this.first_score) {
                 this.third_score = this.second_score;
                 this.second_score = this.first_score;
                 this.first_score = score;
+				
             } else if (!this.second_score || score < this.second_score) {
                 this.third_score = this.second_score;
                 this.second_score = score;
+				
             } else if (!this.third_score || score < this.third_score) {
                 this.third_score = score;
             }
+
+			// Score strings
+			if (this.first_score > 1){
+				this.first_score_string =  `#1: ${this.first_score} strokes`;
+				}
+				else if (this.first_score == 1){
+					this.first_score_string =  `#1: ${this.first_score} stroke`;
+				}
+			else{
+				this.first_score_string = "";
+			}
+			if (this.second_score > 1){
+				this.second_score_string =  `\n#2: ${this.second_score} strokes`;
+				}
+			else if (this.second_score == 1){
+					this.second_score_string =  `\n#2: ${this.second_score} stroke`;
+				}
+			else{
+				this.second_score_string = "";
+			}
+			if (this.third_score > 1){
+				this.third_score_string =  `\n#3: ${this.third_score} strokes`;
+				}
+			else if (this.third_score == 1){
+					this.third_score_string =  `\n#3: ${this.third_score} stroke`;
+				}
+			else{
+				this.third_score_string = "";
+			}
+
         };
     }
 
@@ -152,7 +188,7 @@ export class GolfForIt extends Scene {
         const stroke_count = this.control_panel.appendChild(
             document.createElement("span")
         );
-        stroke_count.style.margin = "30px";
+        stroke_count.style.margin = "25px";
         stroke_count.style.display = "flex";
         stroke_count.style.justifyContent = "center";
         this.live_string((box) => {
@@ -164,7 +200,7 @@ export class GolfForIt extends Scene {
         const hitting_controls = this.control_panel.appendChild(
             document.createElement("span")
         );
-        hitting_controls.style.margin = "0 30px";
+        hitting_controls.style.margin = "0 25px";
         hitting_controls.style.display = "flex";
         hitting_controls.style.justifyContent = "space-between";
         this.key_triggered_button(
@@ -221,7 +257,7 @@ export class GolfForIt extends Scene {
 		const power_controls = this.control_panel.appendChild(
 			document.createElement("span")
 		);
-		power_controls.style.margin = "30px";
+		power_controls.style.margin = "25px";
 		power_controls.style.display = "flex";
 		power_controls.style.justifyContent = "space-between";
 		power_controls.style.alignItems = "center";
@@ -249,7 +285,7 @@ export class GolfForIt extends Scene {
 		
 		// Reset control
 		const reset_control = this.control_panel.appendChild(document.createElement("span"));
-		reset_control.style.margin = "30px";
+		reset_control.style.margin = "25px";
 		reset_control.style.display = "flex";
 		reset_control.style.justifyContent = "center";
 		this.key_triggered_button(
@@ -273,34 +309,26 @@ export class GolfForIt extends Scene {
         scoreboard.style.display = "flex";
         scoreboard.style.flexDirection = "column";
         scoreboard.style.alignItems = "center";
-        scoreboard.style.margin = "0 30px";
+        scoreboard.style.margin = "0 25px";
         scoreboard.style.border = "2px solid black";
-        scoreboard.style.padding = "20px";
+        scoreboard.style.padding = "10px";
         this.live_string((box) => {
             box.textContent = "Scoreboard";
             box.style.marginBottom = "10px";
         }, scoreboard);
-        if (this.first_score) {
-            this.live_string((box) => {
-                box.textContent = `#1: ${this.first_score} strokes`;
-                box.style.marginBottom = "10px";
-            }, scoreboard);
-        } else {
-            this.live_string((box) => {
-                box.textContent = "No scores yet! Be the first!";
-            }, scoreboard);
-        }
-        if (this.second_score) {
-            this.live_string((box) => {
-                box.textContent = `#2: ${this.second_score} strokes`;
-                box.style.marginBottom = "10px";
-            }, scoreboard);
-        }
-        if (this.second_score) {
-            this.live_string((box) => {
-                box.textContent = `#3: ${this.third_score} strokes`;
-            }, scoreboard);
-        }
+		this.live_string((box) => {
+			box.textContent = this.first_score_string;
+			box.style.marginBottom = "5px";
+		}, scoreboard);
+		this.live_string((box) => {
+			box.textContent = this.second_score_string;
+			box.style.marginBottom = "5px";
+		}, scoreboard);
+		this.live_string((box) => {
+			box.textContent = this.third_score_string;
+			box.style.marginBottom = "5px";
+		}, scoreboard);
+       
 
         // Game status
         this.is_game_done = false;
@@ -358,6 +386,8 @@ export class GolfForIt extends Scene {
 
     end_game() {
         this.is_game_done = true;
+		this.computeScoreboard(this.strokeCount);
+
     }
 
     celebrate(dt) {
@@ -368,8 +398,30 @@ export class GolfForIt extends Scene {
             goal.transform.size = vec3(goal.transform.size[0] - dt * 0.2, goal.transform.size[0] - dt * 0.2, goal.transform.size[0] - dt * 0.2);
         } else {
             goal.is_enabled = false;
+			// reset ball
+		this.game_objects.golf_ball = new GameObject({
+				has_rigidbody: true,
+				shape: this.shapes.sphere,
+			});
+		// reset goal - wait for animation to end, + new goal not appearing
+		this.game_objects.goal = new GameObject({
+                size: vec3(1.5, 1.5, 1.5),
+                position: vec3(20, 0.75, -25),
+                material: this.materials.goal,
+                is_trigger: true
+		});
+
+		//reset stroke count
+		this.strokeCount = 0
+
+		// reset power level
+		this.power = 2000;
+
+		// reset game
+		this.is_game_done = false;
         }
     }
+
 
     make_camera_follow_ball(program_state) {
         let golf_ball_transform = this.game_objects.golf_ball.transform;
