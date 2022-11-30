@@ -55,6 +55,11 @@ export class GolfForIt extends Scene {
 				position: vec3(0, 1, -20),
 				material: this.materials.obstacle,
 			}),
+			obstacle2: new GameObject({
+				size: vec3(2, 2, 5), 
+				position: vec3(12, 1, -25),
+				material: this.materials.obstacle,
+			}),
 			left_wall: new GameObject({
 				size: vec3(1, 2, 35),
 				position: vec3(-10, 1, -10),
@@ -76,7 +81,7 @@ export class GolfForIt extends Scene {
 				material: this.materials.obstacle,
 			}),
 			back_wall: new GameObject({
-				size: vec3(1, 2, 17),
+				size: vec3(1, 2, 18),
 				position: vec3(50, 1, -27),
 				material: this.materials.obstacle,
 			}),
@@ -86,6 +91,7 @@ export class GolfForIt extends Scene {
 				material: this.materials.obstacle,
 			}),
 		};
+
 
 		// Settings
 		this.aimSensitivity = Math.PI / 60;
@@ -290,8 +296,17 @@ export class GolfForIt extends Scene {
 		const t = program_state.animation_time / 1000,
 			dt = program_state.animation_delta_time / 1000;
 
+
+		// Zoom out texture
+		this.game_objects.ground.renderer.shape.arrays.texture_coord.forEach(
+             (v, i, l) => l[i] = vec(v[0]*20, v[1]*20)
+            );
+
 		update_physics(this.game_objects, dt);
 		render_game_objects(context, program_state, this.game_objects);
+
+			console.log(this.game_objects);
+
 
 		this.make_camera_follow_ball(program_state);
 	}
