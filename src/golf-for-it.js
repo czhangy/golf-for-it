@@ -40,49 +40,59 @@ export class GolfForIt extends Scene {
             vec3(0, 1, 0)
         );
 
-        // GameObjects
-        this.game_objects = {
-            golf_ball: new GameObject({
-                has_rigidbody: true,
-                shape: this.shapes.sphere,
-            }),
-            ground: new GameObject({
-                size: vec3(100, 1, 100),
-                position: vec3(0, -2, 0),
-                material: this.materials.ground,
-                has_collider: false
-            }),
-            obstacle: new GameObject({
-                size: vec3(2, 2, 2),
-                position: vec3(0, 1, -20),
-                material: this.materials.obstacle,
-            }),
-            left_wall: new GameObject({
-                size: vec3(1, 2, 30),
-                position: vec3(-10, 1, -15),
-                material: this.materials.obstacle,
-            }),
-            right_wall: new GameObject({
-                size: vec3(1, 2, 12),
-                position: vec3(10, 1, 2),
-                material: this.materials.obstacle,
-            }),
-            left_wall2: new GameObject({
-                size: vec3(30, 2, 1),
-                position: vec3(20, 1, -44),
-                material: this.materials.obstacle,
-            }),
-            right_wall2: new GameObject({
-                size: vec3(21, 2, 1),
-                position: vec3(30, 1, -10),
-                material: this.materials.obstacle,
-            }),
-            back_wall: new GameObject({
-                size: vec3(1, 2, 17),
-                position: vec3(50, 1, -27),
-                material: this.materials.obstacle,
-            }),
-            sky_north: new GameObject({
+
+		// GameObjects
+		this.game_objects = {
+			golf_ball: new GameObject({
+				has_rigidbody: true,
+				shape: this.shapes.sphere,
+			}),
+			ground: new GameObject({
+				size: vec3(100, 1, 100),
+				position: vec3(0, -2, 0),
+				material: this.materials.ground,
+			}),
+			obstacle: new GameObject({
+				size: vec3(2, 2, 2),
+				position: vec3(0, 1, -20),
+				material: this.materials.obstacle,
+			}),
+			obstacle2: new GameObject({
+				size: vec3(2, 2, 5), 
+				position: vec3(12, 1, -25),
+				material: this.materials.obstacle,
+			}),
+			left_wall: new GameObject({
+				size: vec3(1, 2, 35),
+				position: vec3(-10, 1, -10),
+				material: this.materials.obstacle,
+			}),
+			right_wall: new GameObject({
+				size: vec3(1, 2, 17),
+				position: vec3(10, 1, 7),
+				material: this.materials.obstacle,
+			}),
+			left_wall2: new GameObject({
+				size: vec3(30, 2, 1),
+				position: vec3(20, 1, -44),
+				material: this.materials.obstacle,
+			}),
+			right_wall2: new GameObject({
+				size: vec3(21, 2, 1),
+				position: vec3(30, 1, -10),
+				material: this.materials.obstacle,
+			}),
+			back_wall: new GameObject({
+				size: vec3(1, 2, 18),
+				position: vec3(50, 1, -27),
+				material: this.materials.obstacle,
+			}),
+			front_wall: new GameObject({
+				size:vec3(11, 2, 1),
+				position: vec3(0, 1, 25),
+				material: this.materials.obstacle,
+			}),
+      sky_north: new GameObject({
                 size: vec3(100, 100, 1),
                 position: vec3(0, 0, -100),
                 material: this.materials.sky,
@@ -149,6 +159,7 @@ export class GolfForIt extends Scene {
             box.textContent = "Strokes: " + this.strokeCount;
         }, stroke_count);
 
+
         // Hitting + aiming controls
         const hitting_controls = this.control_panel.appendChild(
             document.createElement("span")
@@ -205,35 +216,55 @@ export class GolfForIt extends Scene {
             hitting_controls
         );
 
-        // Power controls
-        const power_controls = this.control_panel.appendChild(
-            document.createElement("span")
-        );
-        power_controls.style.margin = "30px";
-        power_controls.style.display = "flex";
-        power_controls.style.justifyContent = "space-between";
-        power_controls.style.alignItems = "center";
-        this.key_triggered_button(
-            "Decrease power",
-            ["s"],
-            () => (this.power = Math.max(0, this.power - 100)),
-            undefined,
-            undefined,
-            undefined,
-            power_controls
-        );
-        this.live_string((box) => {
-            box.textContent = "Power: " + this.power;
-        }, power_controls);
-        this.key_triggered_button(
-            "Increase power",
-            ["w"],
-            () => (this.power = Math.min(4000, this.power + 100)),
-            undefined,
-            undefined,
-            undefined,
-            power_controls
-        );
+
+		// Power controls
+		const power_controls = this.control_panel.appendChild(
+			document.createElement("span")
+		);
+		power_controls.style.margin = "30px";
+		power_controls.style.display = "flex";
+		power_controls.style.justifyContent = "space-between";
+		power_controls.style.alignItems = "center";
+		this.key_triggered_button(
+			"Decrease power",
+			["s"],
+			() => (this.power = Math.max(0, this.power - 100)),
+			undefined,
+			undefined,
+			undefined,
+			power_controls
+		);
+		this.live_string((box) => {
+			box.textContent = "Power: " + this.power;
+		}, power_controls);
+		this.key_triggered_button(
+			"Increase power",
+			["w"],
+			() => (this.power = Math.min(4000, this.power + 100)),
+			undefined,
+			undefined,
+			undefined,
+			power_controls
+		);
+		
+		// Reset control
+		const reset_control = this.control_panel.appendChild(document.createElement("span"));
+		reset_control.style.margin = "30px";
+		reset_control.style.display = "flex";
+		reset_control.style.justifyContent = "center";
+		this.key_triggered_button(
+			"Reset ball",
+			["r"],
+			() => (this.game_objects.golf_ball = new GameObject({
+				has_rigidbody: true,
+				shape: this.shapes.sphere,
+			})),
+			undefined,
+			undefined,
+			undefined,
+			reset_control
+		);
+
 
         // Scoreboard
         const scoreboard = this.control_panel.appendChild(
@@ -299,7 +330,8 @@ export class GolfForIt extends Scene {
             new Light(light_position, color(1, 1, 1, 1), 1000),
         ];
 
-        const t = program_state.animation_time / 1000,
+
+		 const t = program_state.animation_time / 1000,
             dt = program_state.animation_delta_time / 1000;
 
         if (!this.is_game_done) {
@@ -309,12 +341,20 @@ export class GolfForIt extends Scene {
         } else {
             this.celebrate(dt);
         }
+	
+
+		// Zoom out texture
+		this.game_objects.ground.renderer.shape.arrays.texture_coord.forEach(
+             (v, i, l) => l[i] = vec(v[0]*20, v[1]*20)
+            );
+
 
         update_physics(this.game_objects, dt);
         render_game_objects(context, program_state, this.game_objects);
 
         this.make_camera_follow_ball(program_state);
     }
+
 
     end_game() {
         this.is_game_done = true;
