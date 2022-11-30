@@ -30,6 +30,7 @@ export const Materials = {
         color: hex_color("#ffffff"),
     }),
 
+
     obstacle: new Material(new defs.Textured_Phong(), {
         ambient: 0.6,
         diffusivity: 0.6,
@@ -49,6 +50,7 @@ export const Materials = {
         specularity: 0,
         color: hex_color("#008000"),
         texture: new Texture("assets/grass2.jpg"),
+
     }),
     sky: new Material(new defs.Phong_Shader(), {
         ambient: 0.8,

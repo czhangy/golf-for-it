@@ -40,6 +40,7 @@ export class GolfForIt extends Scene {
             vec3(0, 1, 0)
         );
 
+
 		// GameObjects
 		this.game_objects = {
 			golf_ball: new GameObject({
@@ -121,14 +122,12 @@ export class GolfForIt extends Scene {
                 material: this.materials.goal,
                 is_trigger: true
             }),
-		};
+        };
 
-
-		// Settings
-		this.aimSensitivity = Math.PI / 60;
-		this.power = 2000;
-		this.strokeCount = 0;
-
+        // Settings
+        this.aimSensitivity = Math.PI / 60;
+        this.power = 2000;
+        this.strokeCount = 0;
 
         // Score tracking
         this.first_score = null;
@@ -159,6 +158,7 @@ export class GolfForIt extends Scene {
         this.live_string((box) => {
             box.textContent = "Strokes: " + this.strokeCount;
         }, stroke_count);
+
 
         // Hitting + aiming controls
         const hitting_controls = this.control_panel.appendChild(
@@ -330,6 +330,7 @@ export class GolfForIt extends Scene {
             new Light(light_position, color(1, 1, 1, 1), 1000),
         ];
 
+
 		 const t = program_state.animation_time / 1000,
             dt = program_state.animation_delta_time / 1000;
 
@@ -347,13 +348,12 @@ export class GolfForIt extends Scene {
              (v, i, l) => l[i] = vec(v[0]*20, v[1]*20)
             );
 
-		update_physics(this.game_objects, dt);
-		render_game_objects(context, program_state, this.game_objects);
 
+        update_physics(this.game_objects, dt);
+        render_game_objects(context, program_state, this.game_objects);
 
-
-		this.make_camera_follow_ball(program_state);
-	}
+        this.make_camera_follow_ball(program_state);
+    }
 
 
     end_game() {
