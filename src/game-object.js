@@ -15,6 +15,7 @@ const {
     Shape,
     Material,
     Scene,
+    Texture
 } = tiny;
 
 export const Shapes = {
@@ -28,22 +29,24 @@ export const Materials = {
         diffusivity: 0.6,
         color: hex_color("#ffffff"),
     }),
-    obstacle: new Material(new defs.Phong_Shader(), {
+    obstacle: new Material(new defs.Textured_Phong(), {
         ambient: 0.4,
         diffusivity: 0.6,
         specularity: 0,
         color: hex_color("#964B00"),
+        texture: new Texture("assets/wall.jpg")
     }),
     golf_ball: new Material(new defs.Phong_Shader(), {
         ambient: 0.4,
         diffusivity: 0.6,
-        color: hex_color("#ffffff"),
+        color: hex_color("#ffffff")
     }),
-    ground: new Material(new defs.Phong_Shader(), {
+    ground: new Material(new defs.Textured_Phong(), {
         ambient: 0.4,
         diffusivity: 0.6,
         specularity: 0,
         color: hex_color("#008000"),
+        texture: new Texture("assets/grass2.jpg"),
     })
 }
 
