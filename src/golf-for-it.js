@@ -59,7 +59,22 @@ export class GolfForIt extends Scene {
 			}),
 			obstacle2: new GameObject({
 				size: vec3(2, 2, 5), 
-				position: vec3(12, 1, -25),
+				position: vec3(25, 1, -25),
+				material: this.materials.obstacle,
+			}),
+			obstacle3: new GameObject({
+				size: vec3(2, 2, 2),
+				position: vec3(46, 1, -39),
+				material: this.materials.obstacle,
+			}),
+			obstacle4: new GameObject({
+				size: vec3(2, 2, 2),
+				position: vec3(60, 1, -50),
+				material: this.materials.obstacle,
+			}),
+			obstacle5: new GameObject({
+				size: vec3(5, 2, 2),
+				position: vec3(50, 1, -25),
 				material: this.materials.obstacle,
 			}),
 			left_wall: new GameObject({
@@ -73,18 +88,28 @@ export class GolfForIt extends Scene {
 				material: this.materials.obstacle,
 			}),
 			left_wall2: new GameObject({
-				size: vec3(30, 2, 1),
-				position: vec3(20, 1, -44),
+				size: vec3(25, 2, 1),
+				position: vec3(15, 1, -44),
 				material: this.materials.obstacle,
 			}),
 			right_wall2: new GameObject({
-				size: vec3(21, 2, 1),
-				position: vec3(30, 1, -10),
+				size: vec3(30, 2, 1),
+				position: vec3(41, 1, -9),
+				material: this.materials.obstacle,
+			}),
+			left_wall3: new GameObject({
+				size: vec3(1, 2, 20), 
+				position: vec3(40, 1, -63),
+				material: this.materials.obstacle,
+			}),
+			right_wall3: new GameObject({
+				size: vec3(1, 2, 37),
+				position: vec3(70, 1, -46),
 				material: this.materials.obstacle,
 			}),
 			back_wall: new GameObject({
-				size: vec3(1, 2, 18),
-				position: vec3(50, 1, -27),
+				size: vec3(15, 2, 1),
+				position: vec3(55, 1, -82),
 				material: this.materials.obstacle,
 			}),
 			front_wall: new GameObject({
@@ -118,7 +143,7 @@ export class GolfForIt extends Scene {
             }),
             goal: new GameObject({
                 size: vec3(1.5, 1.5, 1.5),
-                position: vec3(20, 0.75, -25),
+                position: vec3(55, 0.75, -65),
                 material: this.materials.goal,
                 is_trigger: true
             }),
@@ -406,7 +431,7 @@ export class GolfForIt extends Scene {
 		// reset goal - wait for animation to end, + new goal not appearing
 		this.game_objects.goal = new GameObject({
                 size: vec3(1.5, 1.5, 1.5),
-                position: vec3(20, 0.75, -25),
+                position: vec3(55, 0.75, -65),
                 material: this.materials.goal,
                 is_trigger: true
 		});
